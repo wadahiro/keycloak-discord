@@ -17,9 +17,14 @@
 
 package org.keycloak.social.discord;
 
+import java.io.IOException;
+import java.util.Set;
+import java.util.stream.Stream;
+
+import javax.ws.rs.core.Response;
+
 import org.jboss.logging.Logger;
 import org.keycloak.broker.oidc.AbstractOAuth2IdentityProvider;
-import org.keycloak.broker.oidc.OAuth2IdentityProviderConfig;
 import org.keycloak.broker.oidc.mappers.AbstractJsonUserAttributeMapper;
 import org.keycloak.broker.provider.BrokeredIdentityContext;
 import org.keycloak.broker.provider.IdentityBrokerException;
@@ -27,6 +32,8 @@ import org.keycloak.broker.provider.util.SimpleHttp;
 import org.keycloak.broker.social.SocialIdentityProvider;
 import org.keycloak.events.EventBuilder;
 import org.keycloak.models.KeycloakSession;
+import org.keycloak.services.ErrorPageException;
+import org.keycloak.services.messages.Messages;
 import org.keycloak.social.linkedin.LinkedInIdentityProvider;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -34,17 +41,19 @@ import com.fasterxml.jackson.databind.JsonNode;
 /**
  * @author <a href="mailto:wadahiro@gmail.com">Hiroyuki Wada</a>
  */
-public class DiscordIdentityProvider extends AbstractOAuth2IdentityProvider<OAuth2IdentityProviderConfig>
-        implements SocialIdentityProvider<OAuth2IdentityProviderConfig> {
+public class DiscordIdentityProvider extends AbstractOAuth2IdentityProvider<DiscordIdentityProviderConfig>
+        implements SocialIdentityProvider<DiscordIdentityProviderConfig> {
 
     private static final Logger log = Logger.getLogger(LinkedInIdentityProvider.class);
 
     public static final String AUTH_URL = "https://discordapp.com/api/oauth2/authorize";
     public static final String TOKEN_URL = "https://discordapp.com/api/oauth2/token";
     public static final String PROFILE_URL = "https://discordapp.com/api/users/@me";
+    public static final String GROUP_URL = "https://discordapp.com/api/users/@me/guilds";
     public static final String DEFAULT_SCOPE = "identify email";
+    public static final String GUILDS_SCOPE = "guilds";
 
-    public DiscordIdentityProvider(KeycloakSession session, OAuth2IdentityProviderConfig config) {
+    public DiscordIdentityProvider(KeycloakSession session, DiscordIdentityProviderConfig config) {
         super(session, config);
         config.setAuthorizationUrl(AUTH_URL);
         config.setTokenUrl(TOKEN_URL);
@@ -78,17 +87,43 @@ public class DiscordIdentityProvider extends AbstractOAuth2IdentityProvider<OAut
     @Override
     protected BrokeredIdentityContext doGetFederatedIdentity(String accessToken) {
         log.debug("doGetFederatedIdentity()");
+        JsonNode profile = null;
         try {
-            JsonNode profile = SimpleHttp.doGet(PROFILE_URL, session).header("Authorization", "Bearer " + accessToken).asJson();
-            
-            return extractIdentityFromProfile(null, profile);
+            profile = SimpleHttp.doGet(PROFILE_URL, session).header("Authorization", "Bearer " + accessToken).asJson();
         } catch (Exception e) {
             throw new IdentityBrokerException("Could not obtain user profile from discord.", e);
+        }
+
+        if (getConfig().hasAllowedGuilds()) {
+            if (!isAllowedGuild(accessToken)) {
+                throw new ErrorPageException(session, Response.Status.FORBIDDEN, Messages.INVALID_REQUESTER);
+            }
+        }
+        return extractIdentityFromProfile(null, profile);
+    }
+
+    protected boolean isAllowedGuild(String accessToken) {
+        try {
+            JsonNode guilds = SimpleHttp.doGet(GROUP_URL, session).header("Authorization", "Bearer " + accessToken).asJson();
+            Set<String> allowedGuilds = getConfig().getAllowedGuildsAsSet();
+            for (JsonNode guild : guilds) {
+                String guildId = getJsonProperty(guild, "id");
+                if (allowedGuilds.contains(guildId)) {
+                    return true;
+                }
+            }
+            return false;
+        } catch (Exception e) {
+            throw new IdentityBrokerException("Could not obtain guilds the current user is a member of from discord.", e);
         }
     }
 
     @Override
     protected String getDefaultScopes() {
-        return DEFAULT_SCOPE;
+        if (getConfig().hasAllowedGuilds()) {
+            return DEFAULT_SCOPE + " " + GUILDS_SCOPE;
+        } else {
+            return DEFAULT_SCOPE;
+        }
     }
 }

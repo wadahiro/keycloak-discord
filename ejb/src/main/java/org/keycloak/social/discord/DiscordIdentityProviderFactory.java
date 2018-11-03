@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.keycloak.social.discord;
 
-import org.keycloak.broker.oidc.OIDCIdentityProviderConfig;
 import org.keycloak.broker.provider.AbstractIdentityProviderFactory;
 import org.keycloak.broker.social.SocialIdentityProviderFactory;
 import org.keycloak.models.IdentityProviderModel;
@@ -25,7 +25,8 @@ import org.keycloak.models.KeycloakSession;
 /**
  * @author <a href="mailto:wadahiro@gmail.com">Hiroyuki Wada</a>
  */
-public class DiscordIdentityProviderFactory extends AbstractIdentityProviderFactory<DiscordIdentityProvider> implements SocialIdentityProviderFactory<DiscordIdentityProvider> {
+public class DiscordIdentityProviderFactory extends AbstractIdentityProviderFactory<DiscordIdentityProvider>
+        implements SocialIdentityProviderFactory<DiscordIdentityProvider> {
 
     public static final String PROVIDER_ID = "discord";
 
@@ -36,7 +37,7 @@ public class DiscordIdentityProviderFactory extends AbstractIdentityProviderFact
 
     @Override
     public DiscordIdentityProvider create(KeycloakSession session, IdentityProviderModel model) {
-        return new DiscordIdentityProvider(session, new OIDCIdentityProviderConfig(model));
+        return new DiscordIdentityProvider(session, new DiscordIdentityProviderConfig(model));
     }
 
     @Override
