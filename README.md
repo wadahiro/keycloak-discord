@@ -17,7 +17,7 @@ You can get Client ID and Client Secret from the created application.
 
 ### Keycloak
 
-1. Open `Themes` setting page in `master` realm. Then set `discord` theme as `Admin Console Theme`.
+1. Open `Themes` setting page in `master` realm. Then set `discord` theme as `Admin Console Theme`. Note: You may need to re-login for reloading the theme.
 2. Add `discord` Identity Provider in the realm which you want to configure.
 3. In the `discord` identity provider page, set `Client Id` and `Client Secret`.
 4. (Optional) Set Guild Id(s) to allow federation if you want.
