@@ -65,8 +65,7 @@ public class DiscordIdentityProvider extends AbstractOAuth2IdentityProvider<OAut
     protected BrokeredIdentityContext extractIdentityFromProfile(EventBuilder event, JsonNode profile) {
         BrokeredIdentityContext user = new BrokeredIdentityContext(getJsonProperty(profile, "id"));
 
-        user.setUsername(getJsonProperty(profile, "username"));
-//        user.setName(getJsonProperty(profile, "username"));
+        user.setUsername(getJsonProperty(profile, "username") + "#" + getJsonProperty(profile, "discriminator"));
         user.setEmail(getJsonProperty(profile, "email"));
         user.setIdpConfig(getConfig());
         user.setIdp(this);
@@ -81,7 +80,7 @@ public class DiscordIdentityProvider extends AbstractOAuth2IdentityProvider<OAut
         log.debug("doGetFederatedIdentity()");
         try {
             JsonNode profile = SimpleHttp.doGet(PROFILE_URL, session).header("Authorization", "Bearer " + accessToken).asJson();
-//            System.out.println(profile.toString());
+            
             return extractIdentityFromProfile(null, profile);
         } catch (Exception e) {
             throw new IdentityBrokerException("Could not obtain user profile from discord.", e);
