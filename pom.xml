@@ -7,7 +7,7 @@
 
     <groupId>org.keycloak.extensions</groupId>
     <artifactId>keycloak-discord-parent</artifactId>
-    <version>0.1.1</version>
+    <version>0.2.0</version>
     <packaging>pom</packaging>
 
     <properties>
