@@ -3,7 +3,7 @@
     <parent>
         <groupId>org.keycloak.extensions</groupId>
         <artifactId>keycloak-discord-parent</artifactId>
-        <version>0.3.0-SNAPSHOT</version>
+        <version>0.2.1-SNAPSHOT</version>
     </parent>
 
     <name>Keycloak Discord EAR</name>
