@@ -7,11 +7,11 @@
 
     <groupId>org.keycloak.extensions</groupId>
     <artifactId>keycloak-discord-parent</artifactId>
-    <version>0.2.0</version>
+    <version>0.2.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <properties>
-        <version.keycloak>4.5.0.Final</version.keycloak>
+        <version.keycloak>9.0.2</version.keycloak>
         <version.wildfly.maven.plugin>1.1.0.Final</version.wildfly.maven.plugin>
     </properties>
 

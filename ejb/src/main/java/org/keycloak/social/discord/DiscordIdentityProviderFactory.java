@@ -17,6 +17,7 @@
 
 package org.keycloak.social.discord;
 
+import org.keycloak.broker.oidc.OAuth2IdentityProviderConfig;
 import org.keycloak.broker.provider.AbstractIdentityProviderFactory;
 import org.keycloak.broker.social.SocialIdentityProviderFactory;
 import org.keycloak.models.IdentityProviderModel;
@@ -38,6 +39,11 @@ public class DiscordIdentityProviderFactory extends AbstractIdentityProviderFact
     @Override
     public DiscordIdentityProvider create(KeycloakSession session, IdentityProviderModel model) {
         return new DiscordIdentityProvider(session, new DiscordIdentityProviderConfig(model));
+    }
+
+    @Override
+    public DiscordIdentityProviderConfig createConfig() {
+        return new DiscordIdentityProviderConfig();
     }
 
     @Override

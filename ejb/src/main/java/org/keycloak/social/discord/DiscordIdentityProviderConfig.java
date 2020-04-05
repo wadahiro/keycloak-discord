@@ -34,6 +34,9 @@ public class DiscordIdentityProviderConfig extends OAuth2IdentityProviderConfig 
         super(model);
     }
 
+    public DiscordIdentityProviderConfig() {
+    }
+
     public String getAllowedGuilds() {
         return getConfig().get("allowedGuilds");
     }

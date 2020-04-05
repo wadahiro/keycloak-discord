@@ -1,0 +1,13 @@
+{
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    "@conveyal/maven-semantic-release",
+    ["@semantic-release/github", {
+      "assets": [
+        {"path": "ear/target/*.ear"}
+      ]
+    }]
+  ]
+}
+
