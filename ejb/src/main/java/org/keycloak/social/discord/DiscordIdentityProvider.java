@@ -46,10 +46,10 @@ public class DiscordIdentityProvider extends AbstractOAuth2IdentityProvider<Disc
 
     private static final Logger log = Logger.getLogger(LinkedInIdentityProvider.class);
 
-    public static final String AUTH_URL = "https://discordapp.com/api/oauth2/authorize";
-    public static final String TOKEN_URL = "https://discordapp.com/api/oauth2/token";
-    public static final String PROFILE_URL = "https://discordapp.com/api/users/@me";
-    public static final String GROUP_URL = "https://discordapp.com/api/users/@me/guilds";
+    public static final String AUTH_URL = "https://discord.com/api/oauth2/authorize";
+    public static final String TOKEN_URL = "https://discord.com/api/oauth2/token";
+    public static final String PROFILE_URL = "https://discord.com/api/users/@me";
+    public static final String GROUP_URL = "https://discord.com/api/users/@me/guilds";
     public static final String DEFAULT_SCOPE = "identify email";
     public static final String GUILDS_SCOPE = "guilds";
 
