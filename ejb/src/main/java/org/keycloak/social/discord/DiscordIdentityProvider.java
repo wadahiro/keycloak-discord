@@ -17,12 +17,7 @@
 
 package org.keycloak.social.discord;
 
-import java.io.IOException;
-import java.util.Set;
-import java.util.stream.Stream;
-
-import javax.ws.rs.core.Response;
-
+import com.fasterxml.jackson.databind.JsonNode;
 import org.jboss.logging.Logger;
 import org.keycloak.broker.oidc.AbstractOAuth2IdentityProvider;
 import org.keycloak.broker.oidc.mappers.AbstractJsonUserAttributeMapper;
@@ -34,9 +29,9 @@ import org.keycloak.events.EventBuilder;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.services.ErrorPageException;
 import org.keycloak.services.messages.Messages;
-import org.keycloak.social.linkedin.LinkedInIdentityProvider;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import javax.ws.rs.core.Response;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:wadahiro@gmail.com">Hiroyuki Wada</a>
@@ -44,7 +39,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class DiscordIdentityProvider extends AbstractOAuth2IdentityProvider<DiscordIdentityProviderConfig>
         implements SocialIdentityProvider<DiscordIdentityProviderConfig> {
 
-    private static final Logger log = Logger.getLogger(LinkedInIdentityProvider.class);
+    private static final Logger log = Logger.getLogger(DiscordIdentityProvider.class);
 
     public static final String AUTH_URL = "https://discordapp.com/api/oauth2/authorize";
     public static final String TOKEN_URL = "https://discordapp.com/api/oauth2/token";
