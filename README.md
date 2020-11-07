@@ -12,7 +12,7 @@ Then deploy it into `$KEYCLOAK_HOME/standalone/deployments/` directory.
 
 ### Discord
 
-Access to [Discord Developer Portal](https://discordapp.com/developers/applications/#top) and create your application.
+Access to [Discord Developer Portal](https://discord.com/developers/applications) and create your application.
 You can get Client ID and Client Secret from the created application.
 
 ### Keycloak
