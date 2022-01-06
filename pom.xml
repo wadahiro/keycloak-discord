@@ -11,7 +11,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <version.keycloak>9.0.2</version.keycloak>
+        <version.keycloak>15.1.1</version.keycloak>
         <version.wildfly.maven.plugin>1.1.0.Final</version.wildfly.maven.plugin>
     </properties>
 
