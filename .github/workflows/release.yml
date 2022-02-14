@@ -35,9 +35,9 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-node-
     - name: Setup semantic-release
-      run: npm install -g @conveyal/maven-semantic-release semantic-release@15 @semantic-release/exec@v3.3.8
+      run: npm install -g @conveyal/maven-semantic-release@v4.5.0 semantic-release@15 @semantic-release/exec@v3.3.8
     - name: Release
-      run: semantic-release --use-conveyal-workflow --skip-maven-deploy
+      run: semantic-release --branch master --use-conveyal-workflow --skip-maven-deploy
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
