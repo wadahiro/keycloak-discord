@@ -5,8 +5,8 @@ Keycloak Social Login extension for Discord.
 
 ## Install
 
-Download `keycloak-discord-ear-<version>.ear` from [Releases page](https://github.com/wadahiro/keycloak-discord/releases).
-Then deploy it into `$KEYCLOAK_HOME/standalone/deployments/` directory.
+Download `keycloak-discord-<version>.jar` from [Releases page](https://github.com/wadahiro/keycloak-discord/releases).
+Then deploy it into `$KEYCLOAK_HOME/providers` directory.
 
 ## Setup
 
@@ -27,7 +27,7 @@ Note: You don't need to setup the theme in `master` realm from v0.3.0.
 ## Source Build
 
 Clone this repository and run `mvn package`.
-You can see `keycloak-discord-ear-<version>.ear` under `ear/target` directory.
+You can see `keycloak-discord-<version>.jar` under `target` directory.
 
 
 ## Licence
