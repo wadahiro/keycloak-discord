@@ -5,3 +5,10 @@
     </div>
     <kc-tooltip>{{:: 'discord.allowed-guilds.tooltip' | translate}}</kc-tooltip>
 </div>
+<div class="form-group">
+    <label class="col-md-2 control-label" for="enabled">{{:: 'discord-allow-guilds-attr' | translate}}</label>
+    <div class="col-md-6">
+        <input ng-model="identityProvider.config.allowGuildsAttr" id="allowGuildAttr" onoffswitch on-text="{{:: 'onText' | translate}}" off-text="{{:: 'offText' | translate}}" />
+    </div>
+    <kc-tooltip>{{:: 'discord.guild-attr.tooltip' | translate}}</kc-tooltip>
+</div>

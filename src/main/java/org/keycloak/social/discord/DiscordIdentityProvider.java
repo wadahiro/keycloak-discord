@@ -18,6 +18,11 @@
 package org.keycloak.social.discord;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import twitter4j.JSONObject;
+
 import org.jboss.logging.Logger;
 import org.keycloak.broker.oidc.AbstractOAuth2IdentityProvider;
 import org.keycloak.broker.oidc.mappers.AbstractJsonUserAttributeMapper;
@@ -30,6 +35,7 @@ import org.keycloak.models.KeycloakSession;
 import org.keycloak.services.ErrorPageException;
 import org.keycloak.services.messages.Messages;
 
+import javax.json.JsonArray;
 import javax.ws.rs.core.Response;
 import java.util.Set;
 
@@ -47,6 +53,7 @@ public class DiscordIdentityProvider extends AbstractOAuth2IdentityProvider<Disc
     public static final String GROUP_URL = "https://discord.com/api/users/@me/guilds";
     public static final String DEFAULT_SCOPE = "identify email";
     public static final String GUILDS_SCOPE = "guilds";
+    public static final String GUILDS_MEMBER_SCOPE = "guilds.member.read";
 
     public DiscordIdentityProvider(KeycloakSession session, DiscordIdentityProviderConfig config) {
         super(session, config);
@@ -94,6 +101,9 @@ public class DiscordIdentityProvider extends AbstractOAuth2IdentityProvider<Disc
                 throw new ErrorPageException(session, Response.Status.FORBIDDEN, Messages.INVALID_REQUESTER);
             }
         }
+        if (getConfig().hasAllowedGuildAttr()) {
+            ((ObjectNode)profile).set("guildAttr", getGuildAttr(accessToken));
+        }
         return extractIdentityFromProfile(null, profile);
     }
 
@@ -113,12 +123,31 @@ public class DiscordIdentityProvider extends AbstractOAuth2IdentityProvider<Disc
         }
     }
 
+    protected ArrayNode getGuildAttr(String accessToken) {
+        try {
+            ArrayNode allGuildAttr = null;
+            Set<String> allowedGuilds = getConfig().getAllowedGuildsAsSet();
+            for (String guild: allowedGuilds) {
+                String guildAttrUrl = PROFILE_URL + "/" + guild + "/member";
+                allGuildAttr.add(SimpleHttp.doGet(guildAttrUrl, session).header("Authorization", "Bearer " + accessToken).asJson());
+            }
+            return allGuildAttr;
+        } catch (Exception e) {
+            throw new IdentityBrokerException("Could not read guild attributes");
+        }
+
+    }
+
     @Override
     protected String getDefaultScopes() {
+        String DefaultScope = DEFAULT_SCOPE;
+
         if (getConfig().hasAllowedGuilds()) {
-            return DEFAULT_SCOPE + " " + GUILDS_SCOPE;
-        } else {
-            return DEFAULT_SCOPE;
+            DefaultScope = DefaultScope.concat(GUILDS_SCOPE);
         }
+        if (getConfig().hasAllowedGuildAttr()) {
+            DefaultScope = DefaultScope.concat(GUILDS_MEMBER_SCOPE);
+        }
+        return DefaultScope;
     }
 }

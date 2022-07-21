@@ -58,6 +58,10 @@ public class DiscordIdentityProviderConfig extends OAuth2IdentityProviderConfig 
         return Collections.emptySet();
     }
 
+    public boolean hasAllowedGuildAttr() {
+        String guildAttr = getConfig().get("allowedGuildAttr");
+        return Boolean.valueOf(guildAttr);
+    }
     public void setPrompt(String prompt) {
         getConfig().put("prompt", prompt);
     }
