@@ -41,7 +41,7 @@ public class DiscordIdentityProvider extends AbstractOAuth2IdentityProvider<Disc
 
     private static final Logger log = Logger.getLogger(DiscordIdentityProvider.class);
 
-    public static final String AUTH_URL = "https://discord.com/api/oauth2/authorize";
+    public static final String AUTH_URL = "https://discord.com/oauth2/authorize";
     public static final String TOKEN_URL = "https://discord.com/api/oauth2/token";
     public static final String PROFILE_URL = "https://discord.com/api/users/@me";
     public static final String GROUP_URL = "https://discord.com/api/users/@me/guilds";
