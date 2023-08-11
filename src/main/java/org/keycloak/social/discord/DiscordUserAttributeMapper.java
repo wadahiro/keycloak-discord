@@ -21,21 +21,21 @@ import org.keycloak.broker.oidc.mappers.AbstractJsonUserAttributeMapper;
 
 /**
  * User attribute mapper.
- * 
+ *
  * @author dannyAAM
  */
 public class DiscordUserAttributeMapper extends AbstractJsonUserAttributeMapper {
 
-	private static final String[] cp = new String[] { DiscordIdentityProviderFactory.PROVIDER_ID };
+    private static final String[] cp = new String[]{DiscordIdentityProviderFactory.PROVIDER_ID};
 
-	@Override
-	public String[] getCompatibleProviders() {
-		return cp;
-	}
+    @Override
+    public String[] getCompatibleProviders() {
+        return cp;
+    }
 
-	@Override
-	public String getId() {
-		return "discord-user-attribute-mapper";
-	}
+    @Override
+    public String getId() {
+        return "discord-user-attribute-mapper";
+    }
 
 }
