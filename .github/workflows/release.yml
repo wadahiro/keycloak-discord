@@ -11,33 +11,27 @@ jobs:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
-    - uses: actions/checkout@v1
-    - name: Set up JDK 1.8
-      uses: actions/setup-java@v1
+    - uses: actions/checkout@v3
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
       with:
-        java-version: 1.8
-    - name: Setup node 10
-      uses: actions/setup-node@v1
+        distribution: 'temurin'
+        java-version: '17'
+        cache: 'maven'
+    - name: Setup node
+      uses: actions/setup-node@v3
       with:
-        node-version: '10.x'
-    - name: Cache for maven
-      uses: actions/cache@v1
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
-    - name: Cache for npm
-      uses: actions/cache@v1
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('.github/workflows/release.yml') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
+        node-version: '16'
+        cache: 'yarn'
     - name: Setup semantic-release
-      run: npm install -g @conveyal/maven-semantic-release@v4.5.0 semantic-release@15 @semantic-release/exec@v3.3.8
+      run: |
+        yarn global add @conveyal/maven-semantic-release@v4.5.0 semantic-release@15
+        echo "$(yarn global bin)" >> $GITHUB_PATH
     - name: Release
-      run: semantic-release --branch master --use-conveyal-workflow --skip-maven-deploy
+      # maven-semantic-release requires "maven-settings.xml" in the workspace directory
+      run: |
+        mv ~/.m2/settings.xml maven-settings.xml
+        semantic-release --branch master --use-conveyal-workflow --skip-maven-deploy
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
