@@ -14,6 +14,22 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
         cache: 'maven'
+    - name: Setup node
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+        cache: 'yarn'
+    - name: Setup semantic-release
+      run: |
+        yarn global add @conveyal/maven-semantic-release@v4.5.0 semantic-release@15
+        echo "$(yarn global bin)" >> $GITHUB_PATH
     - name: Build with Maven
       run: mvn -B package
+    - name: Dry Release
+      # maven-semantic-release requires "maven-settings.xml" in the workspace directory
+      run: |
+        mv ~/.m2/settings.xml maven-settings.xml
+        semantic-release --dry-run --branch master --use-conveyal-workflow --skip-maven-deploy
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
