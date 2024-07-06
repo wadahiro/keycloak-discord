@@ -11,7 +11,7 @@
     <packaging>jar</packaging>
 
     <properties>
-        <version.keycloak>22.0.1</version.keycloak>
+        <version.keycloak>25.0.1</version.keycloak>
 
         <maven.compiler.release>17</maven.compiler.release>
         <compiler-plugin.version>3.13.0</compiler-plugin.version>
