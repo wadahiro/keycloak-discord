@@ -2,34 +2,23 @@ name: Pull Request CI
 
 on: [pull_request]
 
+env:
+  JAVA_VERSION: 17
+
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+
     steps:
     - uses: actions/checkout@v3
-    - name: Set up JDK 17
+
+    - name: Set up JDK ${{ env.JAVA_VERSION }}
       uses: actions/setup-java@v3
       with:
+        java-version: ${{ env.JAVA_VERSION }}
         distribution: 'temurin'
-        java-version: '17'
         cache: 'maven'
-    - name: Setup node
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16'
-        cache: 'yarn'
-    - name: Setup semantic-release
-      run: |
-        yarn global add @conveyal/maven-semantic-release@v4.5.0 semantic-release@15
-        echo "$(yarn global bin)" >> $GITHUB_PATH
+
     - name: Build with Maven
       run: mvn -B package
-    - name: Dry Release
-      # maven-semantic-release requires "maven-settings.xml" in the workspace directory
-      run: |
-        mv ~/.m2/settings.xml maven-settings.xml
-        semantic-release --dry-run --branch master --use-conveyal-workflow --skip-maven-deploy
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
