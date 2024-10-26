@@ -67,11 +67,13 @@ public class DiscordIdentityProvider extends AbstractOAuth2IdentityProvider<Disc
 
     @Override
     protected BrokeredIdentityContext extractIdentityFromProfile(EventBuilder event, JsonNode profile) {
-        BrokeredIdentityContext user = new BrokeredIdentityContext(getJsonProperty(profile, "id"));
+        String id = getJsonProperty(profile, "id");
+        BrokeredIdentityContext user = new BrokeredIdentityContext(id, getConfig());
 
-        user.setUsername(getJsonProperty(profile, "username") + "#" + getJsonProperty(profile, "discriminator"));
+        user.setUsername(getJsonProperty(profile, "username"));
         user.setEmail(getJsonProperty(profile, "email"));
-        user.setIdpConfig(getConfig());
+        user.setUserAttribute("profile_icon",
+                "https://cdn.discordapp.com/" + getJsonProperty(profile, "avatar") + ".png?size=512");
         user.setIdp(this);
 
         AbstractJsonUserAttributeMapper.storeUserProfileForMapper(user, profile, getConfig().getAlias());
@@ -99,7 +101,8 @@ public class DiscordIdentityProvider extends AbstractOAuth2IdentityProvider<Disc
 
     protected boolean isAllowedGuild(String accessToken) {
         try {
-            JsonNode guilds = SimpleHttp.doGet(GROUP_URL, session).header("Authorization", "Bearer " + accessToken).asJson();
+            JsonNode guilds = SimpleHttp.doGet(GROUP_URL, session).header("Authorization", "Bearer " + accessToken)
+                    .asJson();
             Set<String> allowedGuilds = getConfig().getAllowedGuildsAsSet();
             for (JsonNode guild : guilds) {
                 String guildId = getJsonProperty(guild, "id");
@@ -109,7 +112,8 @@ public class DiscordIdentityProvider extends AbstractOAuth2IdentityProvider<Disc
             }
             return false;
         } catch (Exception e) {
-            throw new IdentityBrokerException("Could not obtain guilds the current user is a member of from discord.", e);
+            throw new IdentityBrokerException("Could not obtain guilds the current user is a member of from discord.",
+                    e);
         }
     }
 
