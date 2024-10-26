@@ -7,11 +7,11 @@
 
     <groupId>org.keycloak.extensions</groupId>
     <artifactId>keycloak-discord</artifactId>
-    <version>0.5.1-SNAPSHOT</version>
+    <version>0.6.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
-        <version.keycloak>22.0.1</version.keycloak>
+        <version.keycloak>26.0.2</version.keycloak>
     </properties>
 
     <dependencies>
@@ -48,8 +48,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.11.0</version>
                 <configuration>
-                    <source>17</source>
-                    <target>17</target>
+                    <source>24</source>
+                    <target>24</target>
                 </configuration>
             </plugin>
         </plugins>
