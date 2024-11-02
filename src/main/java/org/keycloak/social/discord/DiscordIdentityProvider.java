@@ -69,7 +69,12 @@ public class DiscordIdentityProvider extends AbstractOAuth2IdentityProvider<Disc
     protected BrokeredIdentityContext extractIdentityFromProfile(EventBuilder event, JsonNode profile) {
         BrokeredIdentityContext user = new BrokeredIdentityContext(getJsonProperty(profile, "id"), getConfig());
 
-        user.setUsername(getJsonProperty(profile, "username") + "#" + getJsonProperty(profile, "discriminator"));
+        String username = getJsonProperty(profile, "username");
+        String discriminator = getJsonProperty(profile, "discriminator");
+        if (!discriminator.equals("0")) {
+            username = username + "#" + discriminator;
+        }
+        user.setUsername(username);
         user.setEmail(getJsonProperty(profile, "email"));
         user.setIdp(this);
 
