@@ -1,13 +1,36 @@
 {
+  "branches": [
+    "master"
+  ],
   "plugins": [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
-    "@conveyal/maven-semantic-release",
-    ["@semantic-release/github", {
-      "assets": [
-        {"path": "ear/target/*.ear"}
-      ]
-    }]
+    "@semantic-release/changelog",
+    [
+      "@terrestris/maven-semantic-release",
+      {
+        "mavenTarget": "install",
+        "clean": false,
+        "updateSnapshotVersion": true,
+        "settingsPath": "/home/runner/.m2/settings.xml",
+        "processAllModules": true
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": [
+          "CHANGELOG.md", "pom.xml", "**/pom.xml"
+        ],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      }
+    ],
+    [
+      "@semantic-release/github",
+      {
+        "successComment": false,
+        "failTitle": false
+      }
+    ]
   ]
 }
-
