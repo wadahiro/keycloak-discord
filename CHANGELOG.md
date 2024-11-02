@@ -1,3 +1,10 @@
+## [0.6.1](https://github.com/wadahiro/keycloak-discord/compare/v0.6.0...v0.6.1) (2024-11-02)
+
+
+### Bug Fixes
+
+* eliminate the possibility of NullPointerException ([#56](https://github.com/wadahiro/keycloak-discord/issues/56)) ([e2b5991](https://github.com/wadahiro/keycloak-discord/commit/e2b5991c7ef33ee3ac6483ca00e3e854bb935371))
+
 # [0.6.0](https://github.com/wadahiro/keycloak-discord/compare/v0.5.0...v0.6.0) (2024-11-02)
 
 
