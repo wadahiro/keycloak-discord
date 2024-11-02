@@ -71,9 +71,11 @@ public class DiscordIdentityProvider extends AbstractOAuth2IdentityProvider<Disc
 
         String username = getJsonProperty(profile, "username");
         String discriminator = getJsonProperty(profile, "discriminator");
-        if (!discriminator.equals("0")) {
-            username = username + "#" + discriminator;
+
+        if (!"0".equals(discriminator)) {
+            username += "#" + discriminator;
         }
+
         user.setUsername(username);
         user.setEmail(getJsonProperty(profile, "email"));
         user.setIdp(this);
