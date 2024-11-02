@@ -9,7 +9,7 @@
     [
       "@terrestris/maven-semantic-release",
       {
-        "mavenTarget": "install",
+        "mavenTarget": "deploy",
         "clean": false,
         "updateSnapshotVersion": true,
         "settingsPath": "/home/runner/.m2/settings.xml",
