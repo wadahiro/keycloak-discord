@@ -11,27 +11,32 @@ jobs:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'temurin'
-        java-version: '17'
-        cache: 'maven'
-    - name: Setup node
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16'
-        cache: 'yarn'
-    - name: Setup semantic-release
-      run: |
-        yarn global add @conveyal/maven-semantic-release@v4.5.0 semantic-release@15
-        echo "$(yarn global bin)" >> $GITHUB_PATH
-    - name: Release
-      # maven-semantic-release requires "maven-settings.xml" in the workspace directory
-      run: |
-        mv ~/.m2/settings.xml maven-settings.xml
-        semantic-release --branch master --use-conveyal-workflow --skip-maven-deploy
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout sources
+        uses: actions/checkout@v4
+        with:
+          # Disabling shallow clone is needed for correctly determing next release with semantic release
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 17
+          cache: 'maven'
+
+      - name: Test
+        run: mvn -B test
+
+      - name: Semantic release
+        id: semantic
+        uses: cycjimmy/semantic-release-action@v4
+        with:
+          semantic_version: 23
+          extra_plugins: |
+            @semantic-release/changelog@6
+            @terrestris/maven-semantic-release@2
+            @semantic-release/git@10
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
